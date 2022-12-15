@@ -14,13 +14,14 @@ import 'package:yox/modules/project_generator/project_generator.dart';
 import 'package:yox/modules/devx_build/devx_build.dart';
 import 'package:yox/modules/devx_clean/devx_clean.dart';
 import 'package:yox/modules/publisher/publisher.dart';
-import 'package:yox/modules/requirement/requirement.dart';
 import 'package:yox/modules/split_generator/booking_core_split_generator.dart';
 import 'package:yox/modules/split_generator/split_generator.dart';
 import 'package:yox/modules/switch_generator/switch_generator.dart';
 import 'package:yox/resources/session/package_info.dart';
 import 'package:yox/shared/helper/exec/exec.dart';
 
+// var flutterPath = "C:\\flutter";
+var flutterPath = "C:\\tools\\flutter";
 void main(List<String> args) async {
   var pubSpecFile = await File("./pubspec.yaml");
   bool hasPubspec = false;
@@ -65,10 +66,10 @@ void main(List<String> args) async {
 
   List mustRegisteredPath = [
     "C:\\yo",
-    "C:\\flutter\\bin",
-    "C:\\flutter\\.pub-cache\\bin",
-    "C:\\flutter\\bin\\cache\\dart-sdk\\bin",
-    "C:\\flutter\\bin\\cache\\dart-sdk\\bin\\cache\\dart-sdk\\bin",
+    "${flutterPath}\\bin",
+    "${flutterPath}\\.pub-cache\\bin",
+    "${flutterPath}\\bin\\cache\\dart-sdk\\bin",
+    "${flutterPath}\\bin\\cache\\dart-sdk\\bin\\cache\\dart-sdk\\bin",
     "C:\\Program Files\\Android\\Android Studio\\jre\\bin",
     "C:\\Program Files\\7-Zip\\",
     //PHP & MYSQL
@@ -264,5 +265,36 @@ void main(List<String> args) async {
     print("1. Run > yox core");
     print("--------------");
     print("CvC");
+  }
+}
+
+class Requirement {
+  static Future<bool> isValid() {
+    List<bool> validations = [];
+    validations.addAll([
+      // cider: ^0.1.0
+      File('${flutterPath}\\.pub-cache\\bin\\cider.bat').existsSync(),
+      // rename: ^1.3.1
+      File('${flutterPath}\\.pub-cache\\bin\\rename.bat').existsSync(),
+    ]);
+
+    print("###############");
+    print(validations);
+    print("###############");
+
+    if (validations.contains(false)) {
+      print("Install required packages ...");
+      execLines([
+        "flutter pub global activate cider",
+      ]);
+      execLines([
+        "flutter pub global activate rename",
+      ]);
+      print("Done! Please run this command again!");
+      return Future.value(false);
+    }
+    ;
+
+    return Future.value(true);
   }
 }
