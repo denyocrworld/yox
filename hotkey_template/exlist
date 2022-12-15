@@ -1,0 +1,11 @@
+Expanded(
+  child: ListView.builder(
+    itemLength: controller.items.length,
+    itemBuilder: (context, index){
+      var item = controller.items[index];
+      return Card(
+        child: Text("$index");
+      );
+    }
+  ),
+),

@@ -1,0 +1,52 @@
+body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ListView.builder(
+                itemCount: controller.productCategoryList.length,
+                itemBuilder: (context, index) {
+                  var productCategory = controller.productCategoryList[index];
+
+                  return InkWell(
+                    onTap: () {
+                      Get.to(ProductListView());
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 10.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 70,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              color: productCategory.backgroundColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(6.0)),
+                            ),
+                            child: Center(
+                              child: Image.asset(
+                                productCategory.productCategoryImage,
+                                width: 50.0,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10.0,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                productCategory.productCategoryName,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.0),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+          ),

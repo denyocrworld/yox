@@ -1,0 +1,14 @@
+ExCombo(
+    id: "gender",
+    label: "Gender",
+    items: [
+    {
+        "label": "Man",
+        "value": "Man",
+    },
+    {
+        "label": "Woman",
+        "value": "Woman",
+    },s
+    ],
+),
