@@ -269,20 +269,24 @@ void main(List<String> args) async {
 }
 
 class Requirement {
+  static bool enablePackageValidations = false;
   static Future<bool> isValid() {
     List<bool> validations = [];
-    validations.addAll([
-      // cider: ^0.1.0
-      File('${flutterPath}\\.pub-cache\\bin\\cider.bat').existsSync(),
-      // rename: ^1.3.1
-      File('${flutterPath}\\.pub-cache\\bin\\rename.bat').existsSync(),
-    ]);
 
-    print("###############");
-    print(validations);
-    print("###############");
+    if (enablePackageValidations) {
+      validations.addAll([
+        // cider: ^0.1.0
+        File('${flutterPath}\\.pub-cache\\bin\\cider.bat').existsSync(),
+        // rename: ^1.3.1
+        File('${flutterPath}\\.pub-cache\\bin\\rename.bat').existsSync(),
+      ]);
 
-    if (validations.contains(false)) {
+      print("###############");
+      print(validations);
+      print("###############");
+    }
+    // if (validations.contains(false)) {
+    if (enablePackageValidations) {
       print("Install required packages ...");
       execLines([
         "flutter pub global activate cider",
@@ -293,7 +297,6 @@ class Requirement {
       print("Done! Please run this command again!");
       return Future.value(false);
     }
-    ;
 
     return Future.value(true);
   }
