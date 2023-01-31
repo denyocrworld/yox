@@ -27,6 +27,8 @@ class SnippetGenerator {
         path = path.toString().replaceAll("\\", "/");
 
         String content = File(path.toString()).readAsStringSync();
+        if (content.indexOf("#SKIP_TEMPLATE") > -1) continue;
+
         var lines = content.split("\n");
         for (var i = 0; i < lines.length; i++) {
           var line = lines[i];
@@ -63,16 +65,30 @@ class SnippetGenerator {
               }
             }
 
+            if (code.indexOf("#TEMPLATE") > -1 ||
+                code.indexOf("#GROUP_TEMPLATE") > -1) {
+              print("Invalid Snippet with prefix ${prefix}");
+              exit(0);
+            }
+
             codes.add("""            
             "${prefix.trim()}": {
                 "prefix": "${prefix.trim()}",
                 "body": [
-                    ${code.join("\n")}
+                    ${code.join("\n").trim()}
                 ]
             }
           """);
 
             if (currentGroupTemplate != "skip_docs") {
+              var currentList =
+                  docCodes.where((i) => i["prefix"] == prefix.trim()).toList();
+              if (currentList.isNotEmpty) {
+                print("Duplicates snippet: $prefix");
+                print("path: $path");
+                exit(0);
+              }
+
               docCodes.add({
                 "prefix": prefix.trim(),
                 "group": "$currentGroupTemplate",
